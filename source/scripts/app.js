@@ -1,4 +1,3 @@
 window.onload = () => {
-    const init = new Initializer()
-    init.Start();
+    var init = new Initializer()
 }

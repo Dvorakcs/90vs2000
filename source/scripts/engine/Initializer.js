@@ -1,56 +1,47 @@
 class Initializer{
-    #login = new Login()
-    #SignUp = new SignUp()
-    #Menu = new Menu()
-    #HUB = new HUB()
-    #Sala = new Sala()
-    #Config = new Config()
-    #Game = new Game()
-    #RenderAndUpdate = {
-        Login:false,
-        SignUp:false,
-        Menu:false,
-        HUB:false,
-        Sala:false,
-        Config:false,
-        Game:false
-    }
     constructor(){
+        this.srcs = ["./source/image/images_engine/characters/Warrior_Blue.png","./source/image/images_engine/characters/Pawn_Blue.png","./source/image/images_engine/characters/Archer_Blue.png"]
+        this.Canvas = document.getElementById("_canvas")
+        this.Context = this.Canvas.getContext('2d')
+        this.Name = null
+        this.keyboard = new Keyboard()
+        console.log((Math.random(0,10) * 100).toFixed(0))
         
-    }
-    Start(){
-        this.#RenderAndUpdate.Login = this.#login.start();
-        this.Update({
-            update:this.#RenderAndUpdate
+        this.Game = new Game({
+            Players: [new GenericsObj({
+                
+                position:{x:10 , y:20},
+                tag:"Player-" + (Math.random(0,10) * 100).toFixed(0),
+                positionOffSet:{x:75,y:75},
+                velocity:{x:0,y:0},
+                sizeOffSet:{width:150,height:150},
+                positionSprite:{x:192,y:192},
+                sizeFrame:{width:192,height:192},
+                sizeFrameCanvas:{width:192,height:192},
+                src: this.srcs[parseInt((Math.random(0,1) * 3))],
+                time : 1,
+                timeMin :1,
+                timeMax :8
+            })]
         })
+        this.UPDATE()
     }
-    Update(eventUpdate){
-        
-        if(eventUpdate.update.Login) this.#login.Update()
-        if(eventUpdate.update.SignUp)this.#SignUp.Update()
-        if(eventUpdate.update.Menu)this.#Menu.Update()
-        if(eventUpdate.update.HUB)this.#HUB.Update()
-        if(eventUpdate.update.Sala)this.#Sala.Update()
-        if(eventUpdate.update.Config)this.#Config.Update()
-        if(eventUpdate.update.Game)this.#Game.Update()
 
-        console.log(eventUpdate)
-        this.Draw({
-            ctx:null,
-            render:eventUpdate.update
+    UPDATE(){
+        this.Game.UPDATE({
+            keyboard:this.keyboard,
+            playersEnemy:this.playersEnemy
         })
-        requestAnimationFrame(() => this.Update(eventUpdate))
+        this.DRAW()
+        requestAnimationFrame(() => this.UPDATE())
     }
-    Draw(eventDraw){
-        if(eventDraw.render.Login) this.#login.Update()
-        if(eventDraw.render.SignUp)this.#SignUp.Update()
-        if(eventDraw.render.Menu)this.#Menu.Update()
-        if(eventDraw.render.HUB)this.#HUB.Update()
-        if(eventDraw.render.Sala)this.#Sala.Update()
-        if(eventDraw.render.Config)this.#Config.Update()
-        if(eventDraw.render.Game)this.#Game.Update()
-    }
-    Stop(){
 
+    DRAW(){
+        this.Context.clearRect(0,0,this.Canvas.clientWidth,this.Canvas.clientHeight)
+        this.Game.DRAW({
+            context:this.Context
+        }) 
+                  
     }
+
 }
